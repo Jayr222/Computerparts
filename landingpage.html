@@ -175,35 +175,45 @@
   </footer>
 
   <!-- Floating Chat Button -->
-  <div id="chat-button" onclick="openChat()">💬</div>
+ <!-- Floating Chat Button -->
+<div id="chat-button">💬</div>
 
-<script type="module">
-  import Chatbox from 'https://cdn.jsdelivr.net/npm/@chaindesk/embeds@latest/dist/chatbox/index.js';
+<script>
+  async function loadChatbox() {
+    // Dynamically load the script
+    const script = document.createElement('script');
+    script.type = 'module';
+    script.src = 'https://cdn.jsdelivr.net/npm/@chaindesk/embeds@latest/dist/chatbox/index.js';
+    document.body.appendChild(script);
 
-  async function initChat() {
-    const widget = await Chatbox.initBubble({
-      agentId: 'cmfo0c10e00x582xjxyfnnhak',
-      contact: {
-        firstName: 'John',
-        lastName: 'Doe',
-        email: 'customer@email.com',
-        phoneNumber: '+33612345644',
-        userId: '42424242',
-      },
-      initialMessages: [
-        'Hello Georges, how are you doing today?',
-        'How can I help you?',
-      ],
-      context: "The user you are talking to is John. Start by greeting him by his name.",
-    });
+    script.onload = async () => {
+      // Chatbox is available as module
+      const { default: Chatbox } = await import(script.src);
 
-    // Attach chat toggle to your floating button
-    const chatButton = document.getElementById('chat-button');
-    chatButton.addEventListener('click', () => widget.toggle());
+      const widget = await Chatbox.initBubble({
+        agentId: 'cmfo0c10e00x582xjxyfnnhak',
+        contact: {
+          firstName: 'John',
+          lastName: 'Doe',
+          email: 'customer@email.com',
+          phoneNumber: '+33612345644',
+          userId: '42424242',
+        },
+        initialMessages: [
+          'Hello Georges, how are you doing today?',
+          'How can I help you?',
+        ],
+        context: "The user you are talking to is John. Start by greeting him by his name.",
+      });
+
+      // Toggle chat on button click
+      document.getElementById('chat-button').addEventListener('click', () => widget.toggle());
+    };
   }
 
-  initChat(); // call the async function
+  loadChatbox();
 </script>
+
 
 </body>
 </html>
